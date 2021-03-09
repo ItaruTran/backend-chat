@@ -1,0 +1,53 @@
+{
+    "name": "FriendList",
+    "plural": "friend-list",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "conversation_id": {
+            "type": "Number"
+        },
+        "user1_id": {
+            "index": true,
+            "type": "Number"
+        },
+        "user2_id": {
+            "index": true,
+            "type": "Number"
+        }
+    },
+    "validations": [],
+    "relations": {
+        "messages": {
+            "type": "hasMany",
+            "model": "Message",
+            "foreignKey": "conversation_id"
+        },
+        "user1": {
+            "type": "belongsTo",
+            "model": "Account",
+            "foreignKey": "user1_id"
+        },
+        "user2": {
+            "type": "belongsTo",
+            "model": "Account",
+            "foreignKey": "user2_id"
+        }
+    },
+    "acls": [
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW"
+        }
+    ],
+    "methods": {}
+}

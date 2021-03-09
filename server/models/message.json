@@ -1,0 +1,38 @@
+{
+    "name": "Message",
+    "plural": "message",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "timestamp": {
+            "type": "date"
+        },
+        "text": {
+            "type": "string"
+        },
+        "user_id": {
+            "type": "number"
+        },
+        "conversation_id": {
+            "type": "number"
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [
+        {
+            "principalType": "ROLE",
+            "principalId": "$everyone",
+            "permission": "DENY"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW"
+        }
+    ],
+    "methods": {}
+}

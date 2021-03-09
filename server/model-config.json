@@ -39,5 +39,15 @@
   "Account": {
     "dataSource": "postgresql",
     "public": true
+  },
+  "FriendList": {
+    "sync": false,
+    "dataSource": "postgresql",
+    "public": true
+  },
+  "Message": {
+    "sync": false,
+    "dataSource": "postgresql",
+    "public": true
   }
 }
