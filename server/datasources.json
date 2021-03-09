@@ -1,0 +1,16 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "postgresql": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "url": "",
+    "database": "chatdb",
+    "password": "postgres",
+    "name": "postgresql",
+    "user": "postgres",
+    "connector": "postgresql"
+  }
+}

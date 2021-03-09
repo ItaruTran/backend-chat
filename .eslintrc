@@ -1,0 +1,17 @@
+{
+  "extends": "loopback",
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "script"
+  },
+  "rules": {
+    "camelcase": "off",
+    "semi": "off",
+    "max-len": "off",
+    "object-curly-spacing": "off",
+    "comma-dangle": "off",
+    "space-before-function-paren": "off",
+    "quotes": "off",
+    "one-var": "off"
+  }
+}

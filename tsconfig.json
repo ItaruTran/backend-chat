@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@t/*": [
+        "server/typings/*"
+      ],
+      "@utils/*": [
+        "server/utils/*"
+      ],
+      "@cm-utils/*": [
+        "common/utils/*"
+      ],
+      "@constant/*": [
+        "common/constant/*"
+      ],
+      "@cm-models/*": [
+        "common/models/*"
+      ],
+      "@models/*": [
+        "server/models/*"
+      ],
+      "@lib/*": [
+        "server/lib/*"
+      ],
+      "@sv/*": [
+        "server/*"
+      ],
+      "@api/*": [
+        "server/api/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "./built/**/*"
+  ],
+  "include": [
+    "**/*.js",
+    "**/*.json"
+  ]
+}
