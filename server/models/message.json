@@ -16,7 +16,7 @@
         "user_id": {
             "type": "number"
         },
-        "conversation_id": {
+        "friendship_id": {
             "type": "number"
         }
     },

@@ -1,3 +1,5 @@
 'use strict';
 
-module.exports = {}
+module.exports = {
+  timeZone: Number(process.env.TIMEZONE || '7'),
+}

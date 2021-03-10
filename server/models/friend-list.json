@@ -7,9 +7,6 @@
         "validateUpsert": true
     },
     "properties": {
-        "conversation_id": {
-            "type": "Number"
-        },
         "user1_id": {
             "index": true,
             "type": "Number"
@@ -24,7 +21,7 @@
         "messages": {
             "type": "hasMany",
             "model": "Message",
-            "foreignKey": "conversation_id"
+            "foreignKey": "friendship_id"
         },
         "user1": {
             "type": "belongsTo",
