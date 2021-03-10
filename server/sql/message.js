@@ -5,15 +5,18 @@ SET enable_partition_pruning = on;
 CREATE TABLE IF NOT EXISTS message (
   id  serial,
   timestamp  timestamp with time zone,
-  text  varchar(1000),
-  user_id  integer not null,
-  conversation_id  integer not null,
+  content  text,
+  attachment_type  integer,
+  attachment  text,
+  sender_id  integer not null,
+  friendship_id  integer not null,
   CONSTRAINT message_pkey PRIMARY KEY (id, timestamp)
 ) PARTITION BY RANGE (timestamp);
 
-CREATE INDEX ON message(id);
-CREATE INDEX ON message(user_id);
-CREATE INDEX ON message(conversation_id);`;
+CREATE INDEX IF NOT EXISTS ON message(id);
+CREATE INDEX IF NOT EXISTS ON message(timestamp);
+CREATE INDEX IF NOT EXISTS ON message(user_id);
+CREATE INDEX IF NOT EXISTS ON message(conversation_id);`;
 
 exports.messagePartition = () => {
   const time = moment.utc().set({

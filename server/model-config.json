@@ -41,7 +41,6 @@
     "public": true
   },
   "FriendList": {
-    "sync": false,
     "dataSource": "postgresql",
     "public": true
   },

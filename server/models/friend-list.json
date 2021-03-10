@@ -9,11 +9,21 @@
     "properties": {
         "user1_id": {
             "index": true,
-            "type": "Number"
+            "required": true,
+            "type": "Number",
+            "postgresql": {
+                "dataType": "integer",
+                "nullable": "NO"
+            }
         },
         "user2_id": {
             "index": true,
-            "type": "Number"
+            "required": true,
+            "type": "Number",
+            "postgresql": {
+                "dataType": "integer",
+                "nullable": "NO"
+            }
         }
     },
     "validations": [],

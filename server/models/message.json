@@ -10,10 +10,16 @@
         "timestamp": {
             "type": "date"
         },
-        "text": {
+        "content": {
             "type": "string"
         },
-        "user_id": {
+        "attachment_type": {
+            "type": "string"
+        },
+        "attachment": {
+            "type": "string"
+        },
+        "sender_id": {
             "type": "number"
         },
         "friendship_id": {
