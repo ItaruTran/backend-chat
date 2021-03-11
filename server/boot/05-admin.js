@@ -9,6 +9,7 @@ module.exports = async (app) => {
     let admins = [
       {
         "username": 'admin',
+        "email": 'admin@admin.admin',
         "password": "QWE123456",
         "realm": "admin"
       },
@@ -20,7 +21,7 @@ module.exports = async (app) => {
       admins.map(async (admin) => {
         var [instance, _] = await Account.findOrCreate(
           { where: { username: admin.username } },
-          { ...admin, firstTime: false }
+          { ...admin }
         );
         return instance;
       })

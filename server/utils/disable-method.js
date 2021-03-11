@@ -7,6 +7,7 @@ const { Model } = require("loopback");
  *   keepDel?: boolean,
  *   keepCreate?: boolean,
  *   keepCount?: boolean,
+ *   removeUpdate?: boolean,
  * }} [opt]
  */
 exports.removeGlobalMethod = (model, opt = {}) => {
@@ -21,6 +22,7 @@ exports.removeGlobalMethod = (model, opt = {}) => {
   model.disableRemoteMethodByName('upsertWithWhere')
   model.disableRemoteMethodByName('findOne')
   if (!opt.keepCreate) model.disableRemoteMethodByName('create')
+  if (opt.removeUpdate) model.disableRemoteMethodByName('prototype.patchAttributes')
 }
 
 /**
