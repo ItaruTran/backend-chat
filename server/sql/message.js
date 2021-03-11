@@ -1,10 +1,13 @@
 const moment = require("moment");
 
+exports.settingDB = `
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+SET enable_partition_pruning = on;`
+
 exports.createMessageTable = `
-SET enable_partition_pruning = on;
 CREATE TABLE IF NOT EXISTS message (
   id  serial,
-  timestamp  timestamp with time zone,
+  timestamp  timestamp with time zone DEFAULT current_timestamp,
   content  text,
   attachment_type  integer,
   attachment  text,
@@ -13,20 +16,17 @@ CREATE TABLE IF NOT EXISTS message (
   CONSTRAINT message_pkey PRIMARY KEY (id, timestamp)
 ) PARTITION BY RANGE (timestamp);
 
-CREATE INDEX IF NOT EXISTS ON message(id);
-CREATE INDEX IF NOT EXISTS ON message(timestamp);
-CREATE INDEX IF NOT EXISTS ON message(user_id);
-CREATE INDEX IF NOT EXISTS ON message(conversation_id);`;
+CREATE INDEX IF NOT EXISTS message_id_idx ON message(id);
+CREATE INDEX IF NOT EXISTS message_timestamp_idx ON message(timestamp);
+CREATE INDEX IF NOT EXISTS message_sender_id_idx ON message(sender_id);
+CREATE INDEX IF NOT EXISTS message_friendship_id_idx ON message(friendship_id);`;
 
-exports.messagePartition = () => {
-  const time = moment.utc().set({
-      date: 1,
-      hour: 0,
-      minute: 0,
-      second: 0,
-      millisecond: 0,
-    }).add(1, 'months')
+exports.messagePartition = (nextYear = true) => {
+  let time = moment.utc().startOf('year')
+  if (nextYear)
+    time.add(1, 'years')
+
   return `
-CREATE TABLE IF NOT EXISTS message_${time.format('yyyyMM')} PARTITION OF message
-  FOR VALUES FROM ('${time.format('yyyy-MM')}-01 00:00:00') TO ('${time.add(1, 'months').format('yyyy-MM')}-01 00:00:00');`
+CREATE TABLE IF NOT EXISTS message_${time.format('yyyy')} PARTITION OF message
+  FOR VALUES FROM ('${time.format('yyyy-MM')}-01 00:00:00') TO ('${time.add(1, 'years').format('yyyy-MM')}-01 00:00:00');`
 }

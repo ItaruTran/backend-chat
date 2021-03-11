@@ -1,6 +1,6 @@
 'use strict';
 
-const { createMessageTable, messagePartition } = require('@sv/sql/message');
+const { createMessageTable, messagePartition, settingDB } = require('@sv/sql/message');
 
 // Migrating database
 
@@ -25,6 +25,8 @@ module.exports = function (app, cb) {
       throw err;
     }
 
+    await executeSql(mydb, settingDB)
+
     let syncStatus = actual ? 'in sync' : 'out of sync';
 
     console.log('');
@@ -39,6 +41,7 @@ module.exports = function (app, cb) {
     console.log(`Migrating Custom Models: ${models}`);
 
     await executeSql(mydb, createMessageTable)
+    await executeSql(mydb, messagePartition(false))
     await executeSql(mydb, messagePartition())
 
     mydb.autoupdate(models, async (err, result) => {

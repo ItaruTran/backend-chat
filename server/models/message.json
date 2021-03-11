@@ -7,14 +7,20 @@
         "validateUpsert": true
     },
     "properties": {
+        "id": {
+            "id": true,
+            "type": "number"
+        },
         "timestamp": {
+            "id": true,
+            "defaultFn": "now",
             "type": "date"
         },
         "content": {
             "type": "string"
         },
         "attachment_type": {
-            "type": "string"
+            "type": "number"
         },
         "attachment": {
             "type": "string"
@@ -32,7 +38,7 @@
         {
             "principalType": "ROLE",
             "principalId": "$everyone",
-            "permission": "DENY"
+            "permission": "ALLOW"
         },
         {
             "principalType": "ROLE",
