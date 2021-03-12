@@ -34,7 +34,6 @@ module.exports = function (app, cb) {
     console.log('');
 
     if (actual) {
-      console.log('Created view successful');
       return cb();
     }
 
