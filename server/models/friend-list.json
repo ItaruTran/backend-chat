@@ -52,8 +52,16 @@
         },
         {
             "principalType": "ROLE",
-            "principalId": "$authenticated",
+            "principalId": "admin",
             "permission": "ALLOW"
+        },
+        {
+            "principalType": "ROLE",
+            "principalId": "$authenticated",
+            "permission": "ALLOW",
+            "property": [
+                "find"
+            ]
         }
     ],
     "methods": {}

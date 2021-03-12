@@ -8,6 +8,7 @@ const { Model } = require("loopback");
  *   keepCreate?: boolean,
  *   keepCount?: boolean,
  *   removeUpdate?: boolean,
+ *   removeFindById?: boolean,
  * }} [opt]
  */
 exports.removeGlobalMethod = (model, opt = {}) => {
@@ -23,6 +24,7 @@ exports.removeGlobalMethod = (model, opt = {}) => {
   model.disableRemoteMethodByName('findOne')
   if (!opt.keepCreate) model.disableRemoteMethodByName('create')
   if (opt.removeUpdate) model.disableRemoteMethodByName('prototype.patchAttributes')
+  if (opt.removeFindById) model.disableRemoteMethodByName('findById')
 }
 
 /**
@@ -31,13 +33,7 @@ exports.removeGlobalMethod = (model, opt = {}) => {
 exports.disableUserMethod = (model) => {
   model.disableRemoteMethodByName('setPassword')
 
-  model.disableRemoteMethodByName("prototype.__findById__accessTokens");
-  model.disableRemoteMethodByName("prototype.__destroyById__accessTokens");
-  model.disableRemoteMethodByName("prototype.__updateById__accessTokens");
-  model.disableRemoteMethodByName("prototype.__get__accessTokens");
-  model.disableRemoteMethodByName("prototype.__create__accessTokens");
-  model.disableRemoteMethodByName("prototype.__delete__accessTokens");
-  model.disableRemoteMethodByName("prototype.__count__accessTokens");
+  this.disableRelationMethod(model, 'accessTokens')
 
   model.disableRemoteMethodByName("prototype.__destroyById__roles");
   model.disableRemoteMethodByName("prototype.__updateById__roles");
@@ -52,4 +48,14 @@ exports.disableUserMethod = (model) => {
 
   model.disableRemoteMethodByName('prototype.verify')
   model.disableRemoteMethodByName('confirm')
+}
+
+exports.disableRelationMethod = (model, name) => {
+  model.disableRemoteMethodByName(`prototype.__findById__${name}`);
+  model.disableRemoteMethodByName(`prototype.__destroyById__${name}`);
+  model.disableRemoteMethodByName(`prototype.__updateById__${name}`);
+  model.disableRemoteMethodByName(`prototype.__get__${name}`);
+  model.disableRemoteMethodByName(`prototype.__create__${name}`);
+  model.disableRemoteMethodByName(`prototype.__delete__${name}`);
+  model.disableRemoteMethodByName(`prototype.__count__${name}`);
 }
