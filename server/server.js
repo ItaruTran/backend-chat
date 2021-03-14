@@ -6,6 +6,8 @@ require('module-alias/register')
 const loopback = require('loopback');
 const boot = require('loopback-boot');
 
+const { SocketManager } = require('@sv/ws')
+
 const app = module.exports = loopback();
 
 app.start = function() {
@@ -30,7 +32,6 @@ boot(app, __dirname, function(err) {
   if (require.main === module) {
     const ins = app.start()
 
-    // attach socket.io to server
-    app.io = require('socket.io')(ins, { destroyUpgrade: false })
+    app.sockerManager = new SocketManager(app, ins)
   }
 });
