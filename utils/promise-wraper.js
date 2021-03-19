@@ -11,3 +11,10 @@ exports.promiseWrapper = (func, ...args) => new Promise((res, rej) => {
     res(result)
   })
 })
+
+/**
+ * @param {number} ms
+ */
+exports.sleep = (ms) => new Promise((res, _) => {
+  setTimeout(res, ms)
+})

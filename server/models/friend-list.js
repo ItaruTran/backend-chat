@@ -1,14 +1,31 @@
-const { removeGlobalMethod, disableRelationMethod } = require("@utils/disable-method")
-const mountApi = require("@utils/mount-api")
+import * as Sequelize from 'sequelize';
 
-module.exports = function (Model) {
-  removeGlobalMethod(Model, {
-    removeUpdate: true,
-    removeFindById: true,
-  })
-  disableRelationMethod(Model, 'messages')
-  Model.disableRemoteMethodByName('prototype.__get__user1')
-  Model.disableRemoteMethodByName('prototype.__get__user2')
+import { sequelize } from "@connector/db";
 
-  mountApi(Model, 'api/friend-list')
-}
+export default sequelize.define(
+  'friend_list', {
+    id: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    user1_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      references: {
+        key: 'id',
+        model: 'user',
+        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      },
+    },
+    user2_id: {
+      type: Sequelize.INTEGER.UNSIGNED,
+      references: {
+        key: 'id',
+        model: 'user',
+        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      },
+    },
+  }, {
+    timestamps: false,
+  },
+)

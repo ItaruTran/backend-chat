@@ -1,11 +1,11 @@
-const socketio = require('socket.io')
-const redis = require("socket.io-redis");
-const { redisSettings } = require('./env');
+import socketio from 'socket.io';
+import redis from "socket.io-redis";
+import jwt from 'jsonwebtoken';
 
-class SocketManager {
-  constructor(app, server) {
-    /** @type {{[k: string]: typeof import('loopback').PersistedModel}} */
-    this._models = app.models
+import { secretKey, redisSettings } from '@sv/env';
+
+export class SocketManager {
+  constructor(server) {
     this.users = {};
 
     /** @type {socketio.Server} */
@@ -30,14 +30,13 @@ class SocketManager {
         return next(new Error("Unauthorization"))
       }
 
-      const token = await AccessToken.findById(client.handshake.query['access_token'])
-
-      if (!token) {
-        return next(new Error("Unauthorization"))
+      try {
+        const token = jwt.verify(client.handshake.query['access_token'], secretKey)
+        this.users[client.id] = token.userId
+        next()
+      } catch (_) {
+        next(new Error("Unauthorization"))
       }
-
-      this.users[client.id] = token.userId
-      next()
     } catch (error) {
       console.error(error);
       next(new Error('Internal Error'))
@@ -79,5 +78,3 @@ class SocketManager {
     return this._io.to(this._getUserRoom(userId)).emit('NewMessage', ...data)
   }
 }
-
-exports.SocketManager = SocketManager

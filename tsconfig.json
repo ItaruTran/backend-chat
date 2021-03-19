@@ -5,11 +5,12 @@
     "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
+      "@connector/*": ["server/connector/*"],
       "@t/*": [
         "server/typings/*"
       ],
       "@utils/*": [
-        "server/utils/*"
+        "utils/*"
       ],
       "@cm-utils/*": [
         "common/utils/*"
@@ -20,8 +21,8 @@
       "@cm-models/*": [
         "common/models/*"
       ],
-      "@models/*": [
-        "server/models/*"
+      "@models": [
+        "server/models"
       ],
       "@lib/*": [
         "server/lib/*"

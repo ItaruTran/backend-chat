@@ -1,8 +1,7 @@
 {
-  "extends": "loopback",
   "parserOptions": {
     "ecmaVersion": 9,
-    "sourceType": "script"
+    "sourceType": "module"
   },
   "rules": {
     "camelcase": "off",
