@@ -1,8 +1,8 @@
-import { Sequelize } from 'sequelize';
+const { Sequelize } = require('sequelize');
 
-import { postgresql } from '@sv/env';
+const { postgresql } = require('@sv/env');
 
-export const sequelize = new Sequelize(
+exports.sequelize = new Sequelize(
   postgresql.database,
   postgresql.user,
   postgresql.password, {

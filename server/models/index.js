@@ -1,3 +1,3 @@
-export { default as FriendList } from "./friend-list";
-export { default as Message } from "./message";
-export { default as User } from "./user";
+exports.FriendList = require("./friend-list");
+exports.Message = require("./message");
+exports.User = require("./user");

@@ -1,29 +1,29 @@
-import * as Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import { sequelize } from "@connector/db";
+const { sequelize } = require("@connector/db");
 
-export default sequelize.define(
+module.exports = sequelize.define(
   'friend_list', {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
     user1_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      references: {
-        key: 'id',
-        model: 'user',
-        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
-      },
+      type: Sequelize.INTEGER,
+      // references: {
+      //   key: 'id',
+      //   model: 'user',
+      //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      // },
     },
     user2_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      references: {
-        key: 'id',
-        model: 'user',
-        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
-      },
+      type: Sequelize.INTEGER,
+      // references: {
+      //   key: 'id',
+      //   model: 'user',
+      //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      // },
     },
   }, {
     timestamps: false,

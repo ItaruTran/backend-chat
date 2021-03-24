@@ -1,9 +1,9 @@
-import { createHash } from "crypto";
+const { createHash } = require("crypto");
 
 /**
  * @param {string} password
  * @returns {string}
  */
-export function hashPassword(password) {
+exports.hashPassword = function (password) {
   return createHash('md5').update(password).digest('base64')
 }

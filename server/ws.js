@@ -1,10 +1,10 @@
-import socketio from 'socket.io';
-import redis from "socket.io-redis";
-import jwt from 'jsonwebtoken';
+const socketio = require('socket.io');
+const redis = require("socket.io-redis");
+const jwt = require('jsonwebtoken');
 
-import { secretKey, redisSettings } from '@sv/env';
+const { secretKey, redisSettings } = require('@sv/env');
 
-export class SocketManager {
+exports.SocketManager = class {
   constructor(server) {
     this.users = {};
 

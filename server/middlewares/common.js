@@ -1,18 +1,18 @@
-import compression from "compression";
-import {
+const compression = require("compression");
+const {
   xssFilter,
   frameguard,
   hsts,
   hidePoweredBy,
   ieNoOpen,
   noSniff,
-  noCache, } from "helmet";
-import * as express from 'express'
+} = require("helmet");
+const express = require('express')
 
 /**
  * @param {express.Express} app
  */
-export default function (app) {
+module.exports = function (app) {
   app.use(compression())
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
@@ -28,14 +28,5 @@ export default function (app) {
   app.use(hidePoweredBy())
   app.use(ieNoOpen())
   app.use(noSniff())
-  app.use(noCache())
-
-  /** catch 404 and forward to error handler */
-  app.use('*', (req, res) => {
-    return res.status(404).json({
-      success: false,
-      message: 'API endpoint doesnt exist'
-    })
-  });
 
 }

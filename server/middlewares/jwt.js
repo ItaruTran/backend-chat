@@ -1,8 +1,8 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
-import { secretKey } from '@sv/env';
+const { secretKey } = require('@sv/env');
 
-export const checkAuth = (req, res, next) => {
+exports.checkAuth = (req, res, next) => {
   if (!req.headers['authorization']) {
     return res.status(400).json({ success: false, message: 'No access token provided' });
   }

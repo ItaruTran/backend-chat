@@ -1,15 +1,17 @@
-import { createServer } from "http";
+'use strict';
+const { createServer } = require("http");
 
-import _ from 'module-alias/register.js'
-import * as express from "express";
+require('module-alias/register.js')
+const express = require("express");
 
 // routes
-import userRouter from "@api/user";
+const apiRouter = require("@api/index");
 
 // // middlewares
-import commonMid from './middlewares/common.js'
-import { SocketManager } from "./ws";
-import { serverPort } from "./env";
+const commonMid = require('./middlewares/common.js')
+const notFound = require('./middlewares/not-found')
+const { SocketManager } = require("./ws");
+const { serverPort } = require("./env");
 
 const app = express();
 
@@ -18,16 +20,18 @@ app.set("port", serverPort);
 // setup common middlewares
 commonMid(app)
 
-app.use("/users", userRouter);
+app.use("/api", apiRouter);
+
+notFound(app)
 
 /** Create HTTP server. */
 const server = createServer(app);
 /** Create socket connection */
-export const socketManager = new SocketManager(server);
+exports.socketManager = new SocketManager(server);
 
 /** Listen on provided port, on all network interfaces. */
 server.listen(serverPort);
 /** Event listener for HTTP server "listening" event. */
 server.on("listening", () => {
-  console.log(`Listening on: http://localhost:${port}/`)
+  console.log(`Listening on: http://localhost:${serverPort}/`)
 });

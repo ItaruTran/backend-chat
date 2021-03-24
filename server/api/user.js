@@ -1,11 +1,12 @@
-import { Router } from "express";
-import jwt from 'jsonwebtoken';
+const { Router } = require("express");
+const jwt = require('jsonwebtoken');
 
-import { User } from "@models";
-import { hashPassword } from "@lib/hash";
-import { secretKey } from "@sv/env";
+const { User } = require("@models");
+const { hashPassword } = require("@lib/hash");
+const { secretKey } = require("@sv/env");
 
 const router = Router()
+module.exports = router
 
 router.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
@@ -18,19 +19,17 @@ router.post('/login', async (req, res, next) => {
 
   if (!user) {
     res.status(401).send('Unauthorization')
-    return next()
+    return
   }
 
   if (user.password !== hashPassword(password)) {
     res.status(401).send('Unauthorization')
-    return next()
+    return
   }
 
   res.json({
     id: `Bearer ${jwt.sign({ userId: user.id }, secretKey)}`,
     userId: user.id,
   })
-  return next()
+  return
 })
-
-export default router

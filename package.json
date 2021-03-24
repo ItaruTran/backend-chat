@@ -6,14 +6,14 @@
     "node": ">=14"
   },
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "lint": "eslint .",
     "start": "node ."
   },
   "_moduleAliases": {
     "@connector": "server/connector",
-    "@utils": "server/utils",
+    "@utils": "utils",
     "@cm-utils": "common/utils",
     "@constant": "common/constant",
     "@cm-models": "common/models",

@@ -1,10 +1,10 @@
-import { utc } from "moment";
+const { utc } = require("moment");
 
-export const settingDB = `
+exports.settingDB = `
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 SET enable_partition_pruning = on;`
 
-export const createMessageTable = `
+exports.createMessageTable = `
 CREATE TABLE IF NOT EXISTS message (
   id  serial,
   timestamp  timestamp with time zone DEFAULT current_timestamp,
@@ -21,7 +21,7 @@ CREATE INDEX IF NOT EXISTS message_timestamp_idx ON message(timestamp);
 CREATE INDEX IF NOT EXISTS message_sender_id_idx ON message(sender_id);
 CREATE INDEX IF NOT EXISTS message_friendship_id_idx ON message(friendship_id);`;
 
-export function messagePartition(nextYear = true) {
+exports.messagePartition = function (nextYear = true) {
   let time = utc().startOf('year')
   if (nextYear)
     time.add(1, 'years')

@@ -1,11 +1,12 @@
-import * as Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 
-import { sequelize } from '@connector/db';
+const { sequelize } = require("@connector/db");
 
-export default sequelize.define(
+module.exports = sequelize.define(
   'message', {
     id: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
       primaryKey: true,
     },
     timestamp: {
@@ -16,26 +17,26 @@ export default sequelize.define(
       type: Sequelize.STRING,
     },
     attachment_type: {
-      type: Sequelize.INTEGER.UNSIGNED,
+      type: Sequelize.INTEGER,
     },
     attachment: {
       type: Sequelize.STRING,
     },
     sender_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      references: {
-        key: 'id',
-        model: 'user',
-        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
-      },
+      type: Sequelize.INTEGER,
+      // references: {
+      //   key: 'id',
+      //   model: 'user',
+      //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      // },
     },
     friendship_id: {
-      type: Sequelize.INTEGER.UNSIGNED,
-      references: {
-        key: 'id',
-        model: 'friend_list',
-        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
-      },
+      type: Sequelize.INTEGER,
+      // references: {
+      //   key: 'id',
+      //   model: 'friend_list',
+      //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      // },
     }
   }, {
     timestamps: false,
