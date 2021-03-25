@@ -1,3 +1,3 @@
-exports.FriendList = require("./friend-list");
+exports.FriendShip = require("./friendship");
 exports.Message = require("./message");
 exports.User = require("./user");

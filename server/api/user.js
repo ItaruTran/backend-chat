@@ -28,7 +28,7 @@ router.post('/login', async (req, res, next) => {
   }
 
   res.json({
-    id: `Bearer ${jwt.sign({ userId: user.id }, secretKey)}`,
+    id: `Bearer ${jwt.sign({ sub: user.id.toString() }, secretKey)}`,
     userId: user.id,
   })
   return

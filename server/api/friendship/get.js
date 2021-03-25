@@ -1,12 +1,12 @@
 const Sequelize = require('sequelize');
 
-const { FriendList } = require("@models")
+const { FriendShip } = require("@models")
 
 /**
  * @type {import('@t/request').RequestHandler}
  */
 exports.handler = async (req, res, next) => {
-  const friends = await FriendList.findAll({
+  const friends = await FriendShip.findAll({
     where: Sequelize.or(
       { user1_id: req.userId },
       { user2_id: req.userId },

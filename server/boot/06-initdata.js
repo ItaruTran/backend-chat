@@ -1,9 +1,8 @@
 'use strict';
 
-module.exports = async (app) => {
-  /** @type {{[k: string]: typeof import('loopback').PersistedModel}} */
-  const { Account, FriendList } = app.models;
+const { User, FriendShip, } = require('@models')
 
+module.exports = async (app) => {
   const users = [
     'Remy Sharp',
     'Cindy Baker',
@@ -13,14 +12,13 @@ module.exports = async (app) => {
   console.log('Create accounts');
   const accounts = await Promise.all(
     users.map(async (username) => {
-      var [instance, _] = await Account.findOrCreate(
-        { where: { username } },
-        {
+      var [instance, _] = await User.findOrCreate({
+        where: { username },
+        defaults: {
           username,
-          email: `${username.substr(1, 3)}@test.test`,
           password: '123456',
         }
-      );
+      });
       return instance;
     })
   )
@@ -33,10 +31,10 @@ module.exports = async (app) => {
         user1_id: account.id,
         user2_id: acc.id,
       }
-      await FriendList.findOrCreate(
-        { where: data },
-        data,
-      )
+      await FriendShip.findOrCreate({
+        where: data,
+        defaults: data,
+      })
     }
   } while (accounts.length > 1);
 }

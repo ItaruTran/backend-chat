@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const { Message, FriendList } = require("@models");
+const { Message, FriendShip } = require("@models");
 const { ForbiddenError } = require('@utils/error');
 
 /**
@@ -14,7 +14,7 @@ exports.handler = async (req, res, next) => {
   if (!filter || !filter.friendship_id)
     throw ForbiddenError()
 
-  const count = await FriendList.count({
+  const count = await FriendShip.count({
     where: Sequelize.and(
       { id: filter.friendship_id, },
       Sequelize.or(

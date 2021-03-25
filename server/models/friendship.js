@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { sequelize } = require("@connector/db");
 
 module.exports = sequelize.define(
-  'friend_list', {
+  'friendship', {
     id: {
       type: Sequelize.INTEGER,
       autoIncrement: true,

@@ -4,10 +4,12 @@ const jwt = require('jsonwebtoken');
 
 const { secretKey, redisSettings } = require('@sv/env');
 
-exports.SocketManager = class {
-  constructor(server) {
+class SocketManager {
+  constructor() {
     this.users = {};
+  }
 
+  init(server) {
     /** @type {socketio.Server} */
     this._io = socketio(server, {
       destroyUpgrade: false,
@@ -24,8 +26,6 @@ exports.SocketManager = class {
 
   _checkUser = async (client, next) => {
     try {
-      const { AccessToken } = this._models;
-
       if (!client.handshake.query['access_token']) {
         return next(new Error("Unauthorization"))
       }
@@ -78,3 +78,5 @@ exports.SocketManager = class {
     return this._io.to(this._getUserRoom(userId)).emit('NewMessage', ...data)
   }
 }
+
+exports.socketManager = new SocketManager()

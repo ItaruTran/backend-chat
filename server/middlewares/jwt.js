@@ -9,7 +9,7 @@ exports.checkAuth = (req, res, next) => {
   const accessToken = req.headers.authorization.split(' ')[1];
   try {
     const decoded = jwt.verify(accessToken, secretKey);
-    req.userId = decoded.userId;
+    req.userId = Number(decoded.sub);
     return next();
   } catch (error) {
     return res.status(401).json({ success: false, message: error.message });
