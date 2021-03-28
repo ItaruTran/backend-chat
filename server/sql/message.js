@@ -12,14 +12,16 @@ CREATE TABLE IF NOT EXISTS message (
   attachment_type  integer,
   attachment  text,
   sender_id  integer not null,
-  friendship_id  integer not null,
+  friendship_id  integer,
+  group_id  integer,
   CONSTRAINT message_pkey PRIMARY KEY (id, timestamp)
 ) PARTITION BY RANGE (timestamp);
 
 CREATE INDEX IF NOT EXISTS message_id_idx ON message(id);
 CREATE INDEX IF NOT EXISTS message_timestamp_idx ON message(timestamp);
 CREATE INDEX IF NOT EXISTS message_sender_id_idx ON message(sender_id);
-CREATE INDEX IF NOT EXISTS message_friendship_id_idx ON message(friendship_id);`;
+CREATE INDEX IF NOT EXISTS message_friendship_id_idx ON message(friendship_id);
+CREATE INDEX IF NOT EXISTS message_group_id_idx ON message(group_id);`;
 
 exports.messagePartition = function (nextYear = true) {
   let time = utc().startOf('year')

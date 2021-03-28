@@ -3,41 +3,37 @@ const Sequelize = require('sequelize');
 const { sequelize } = require("@connector/db");
 
 module.exports = sequelize.define(
-  'friendship', {
-    id: {
+  'member',
+  {
+    member_id: {
       type: Sequelize.INTEGER,
-      autoIncrement: true,
       primaryKey: true,
-    },
-    user1_id: {
-      type: Sequelize.INTEGER,
       // references: {
       //   key: 'id',
       //   model: 'users',
       //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
       // },
     },
-    user2_id: {
+    group_id: {
       type: Sequelize.INTEGER,
-      // references: {
-      //   key: 'id',
-      //   model: 'users',
-      //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
-      // },
+      primaryKey: true,
+      references: {
+        key: 'id',
+        model: 'group_chats',
+        deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
+      },
     },
-  }, {
+  },
+  {
     indexes: [
       {
-        fields: ['id']
+        fields: ['member_id'],
       },
       {
-        fields: ['user1_id']
-      },
-      {
-        fields: ['user2_id']
+        fields: ['group_id'],
       },
     ],
     createdAt: 'created',
     updatedAt: 'modified',
-  },
-)
+  }
+);

@@ -32,7 +32,7 @@ class SocketManager {
 
       try {
         const token = jwt.verify(client.handshake.query['access_token'], secretKey)
-        this.users[client.id] = token.userId
+        this.users[client.id] = Number(token.sub)
         next()
       } catch (_) {
         next(new Error("Unauthorization"))

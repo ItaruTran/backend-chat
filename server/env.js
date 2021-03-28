@@ -1,5 +1,7 @@
 'use strict';
 
+exports.stage = process.env.NODE_ENV
+
 exports.timeZone = Number(process.env.TIMEZONE || '7');
 
 exports.redisSettings = {
@@ -18,3 +20,5 @@ exports.postgresql = {
 exports.serverPort = process.env.PORT || "3000"
 
 exports.secretKey = process.env.SECRET_KEY
+
+exports.includeUser = process.env.INCLUDE_USER === 'true'

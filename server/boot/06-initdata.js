@@ -1,8 +1,12 @@
 'use strict';
 
-const { User, FriendShip, } = require('@models')
+const { User, FriendShip, } = require('@models');
+const { includeUser } = require('@sv/env');
 
 module.exports = async (app) => {
+  if (!includeUser)
+    return
+
   const users = [
     'Remy Sharp',
     'Cindy Baker',

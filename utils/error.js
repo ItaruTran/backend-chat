@@ -1,4 +1,4 @@
-class HTTPError extends Error {
+exports.HTTPError = class HTTPError extends Error {
   /**
    * @param {number} [code]
    * @param {string} [message]
@@ -18,8 +18,23 @@ class HTTPError extends Error {
     this.data = data
   }
 }
-exports.HTTPError = HTTPError
 
-exports.ForbiddenError = (message) => new HTTPError(403, message || 'Forbidden')
+exports.ForbiddenError = class ForbiddenError extends this.HTTPError {
+  /**
+   * @param {string} [message]
+   * @param {any} [data]
+   */
+  constructor(message, data) {
+    super(403, message || 'Forbidden', data)
+  }
+}
 
-exports.ValidationError = (message) => new HTTPError(422, message || 'Validation error')
+exports.ValidationError = class ValidationError extends this.HTTPError {
+  /**
+ * @param {string} [message]
+ * @param {any} [data]
+ */
+  constructor(message, data) {
+    super(422, message || 'Validation error', data)
+  }
+}

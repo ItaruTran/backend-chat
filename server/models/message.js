@@ -37,8 +37,12 @@ module.exports = sequelize.define(
       //   model: 'friend_list',
       //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
       // },
-    }
+    },
+    group_id: {
+      type: Sequelize.INTEGER,
+    },
   }, {
+    tableName: 'message',
     timestamps: false,
   },
 )

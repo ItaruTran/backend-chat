@@ -5,7 +5,8 @@ interface MessageInput {
   attachment_type?: number
   attachment?: string
   sender_id: number
-  friendship_id: number
+  friendship_id?: number
+  group_id?: number
 }
 
 interface Message extends MessageInput {
@@ -13,14 +14,15 @@ interface Message extends MessageInput {
   timestamp: Date
 }
 
-declare class MessageM extends Sequelize.Model<Message, MessageInput> {
+declare class MessageM extends Sequelize.Model<Message, MessageInput> implements Message {
   id: number
   timestamp: Date
   content: string
   attachment_type?: number
   attachment?: string
   sender_id: number
-  friendship_id: number
+  friendship_id?: number
+  group_id?: number
 }
 
 export = MessageM

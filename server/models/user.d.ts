@@ -9,7 +9,7 @@ interface User extends UserInput {
   id: number
 }
 
-declare class UserM extends Sequelize.Model<User, UserInput> {
+declare class UserM extends Sequelize.Model<User, UserInput> implements User {
   id: number
   username: string
   password: string

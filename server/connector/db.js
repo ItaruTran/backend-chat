@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const { postgresql } = require('@sv/env');
+const { postgresql, stage } = require('@sv/env');
 
 exports.sequelize = new Sequelize(
   postgresql.database,
@@ -14,4 +14,5 @@ exports.sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000
     },
+    logging: stage !== 'production'
 });
