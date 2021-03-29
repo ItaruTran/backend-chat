@@ -14,7 +14,7 @@ exports.handler = async (req, res, next) => {
   if (!filter || (!filter.friendship_id && !filter.group_id))
     throw new ForbiddenError()
 
-  let where, count
+  let where, count = 0
 
   if (filter.friendship_id) {
     count = await FriendShip.count({
@@ -45,6 +45,7 @@ exports.handler = async (req, res, next) => {
   const messages = await Message.findAll({
     limit: req.query.limit,
     offset: req.query.offset,
+    order: [req.query.order.split(' ')],
     where,
   })
 

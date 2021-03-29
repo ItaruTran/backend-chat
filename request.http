@@ -76,6 +76,7 @@ GET {{host}}/api/message/
   ?filter={"friendship_id": 1}
   &limit=5
   &offset=0
+  &order=timestamp DESC
 Content-Type: application/json
 Authorization: {{token2}}
 
@@ -84,5 +85,6 @@ GET {{host}}/api/message/
   ?filter={"group_id": 1}
   &limit=5
   &offset=0
+  &order=timestamp DESC
 Content-Type: application/json
 Authorization: {{token2}}
