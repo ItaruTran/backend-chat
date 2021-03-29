@@ -2,7 +2,7 @@ const socketio = require('socket.io');
 const redis = require("socket.io-redis");
 const jwt = require('jsonwebtoken');
 
-const { secretKey, redisSettings } = require('@sv/env');
+const { secretKey, redisSettings, allowOrgins } = require('@sv/env');
 
 class SocketManager {
   constructor() {
@@ -14,7 +14,7 @@ class SocketManager {
     this._io = socketio(server, {
       destroyUpgrade: false,
       cors: {
-        origin: "*",
+        origin: allowOrgins,
         methods: ["GET", "POST"],
       }
     })

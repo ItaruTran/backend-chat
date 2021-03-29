@@ -22,3 +22,5 @@ exports.serverPort = process.env.PORT || "3000"
 exports.secretKey = process.env.SECRET_KEY
 
 exports.includeUser = process.env.INCLUDE_USER === 'true'
+
+exports.allowOrgins = (process.env.ALLOW_ORGINS && process.env.ALLOW_ORGINS.split(',')) || '*'

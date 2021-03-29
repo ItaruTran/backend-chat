@@ -16,6 +16,7 @@ REDIS_HOST=127.0.0.1
 REDIS_PORT=6379
 
 SECRET_KEY=secret-key
+ALLOW_ORGINS=*
 
 # Add this if you want login api and auto create friendship data
 INCLUDE_USER=true
@@ -41,6 +42,7 @@ REDIS_HOST=redis
 REDIS_PORT=6379
 
 SECRET_KEY=please-add-strong-secret-key
+ALLOW_ORGINS=*
 ```
 
 - Run command `docker-compose up -d`

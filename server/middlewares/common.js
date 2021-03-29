@@ -8,6 +8,8 @@ const {
   noSniff,
 } = require("helmet");
 const express = require('express')
+const cors = require('cors');
+const { allowOrgins } = require("@sv/env");
 
 /**
  * @param {express.Express} app
@@ -29,4 +31,7 @@ module.exports = function (app) {
   app.use(ieNoOpen())
   app.use(noSniff())
 
+  app.use(cors({
+    origin: allowOrgins,
+  }))
 }
