@@ -17,7 +17,7 @@ USER appuser
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY --chown=appuser:appuser package*.json ./
-RUN npm install --production
+RUN npm install --omit=dev --force
 
 # Bundle app source
 COPY --chown=appuser:appuser ./ .
