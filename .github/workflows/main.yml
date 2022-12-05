@@ -52,9 +52,9 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./
-          file: ./Dockerfile
+          file: ./.docker/Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
-          platforms: linux/arm,linux/amd64
+          platforms: linux/arm/v7,linux/arm64,linux/amd64
           push: true
           tags: ghcr.io/${{ env.REPO }}:latest
           cache-from: type=local,src=/tmp/.buildx-cache
