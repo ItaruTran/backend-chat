@@ -1,4 +1,4 @@
-FROM node:14.17
+FROM node:16-bullseye-slim
 
 ENV HOME /usr/src/app/
 ENV MEDIA_PATH /storage
