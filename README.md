@@ -69,3 +69,7 @@ optional arguments:
   -s S, --stage S  target environment (default: local)
   -b, --build      build images of stack
 ```
+
+## License
+Licensed under [GPLv3](./LICENSE).
+
