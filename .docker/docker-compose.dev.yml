@@ -1,0 +1,19 @@
+version: "3.5"
+
+services:
+  backend-chat:
+    networks:
+      - public
+    deploy:
+      labels:
+        # Use the "le" (Let's Encrypt)
+        - traefik.http.routers.${name}-https.tls.certresolver=le
+
+networks:
+  public:
+    external: true
+    name: traefik_public
+
+volumes:
+  media-gfs:
+    driver: glusterfs

@@ -1,37 +1,26 @@
-const compression = require("compression");
-const {
-  xssFilter,
-  frameguard,
-  hsts,
-  hidePoweredBy,
-  ieNoOpen,
-  noSniff,
-} = require("helmet");
-const express = require('express')
-const cors = require('cors');
-const { allowOrgins } = require("@sv/env");
+import fastifyHelmet from '@fastify/helmet'
+import fastifyMultipart from '@fastify/multipart'
+import fastifyCors from '@fastify/cors';
+import { allowOrgins } from "#sv/env.js";
+import fastifyQs from 'fastify-qs'
+import { notFoundHandler, errorHandler } from './error-hook.js';
 
 /**
- * @param {express.Express} app
+ * @param {import('fastify').FastifyInstance} fastify
  */
-module.exports = function (app) {
-  app.use(compression())
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
+export default async function (fastify) {
+  await fastify.register(fastifyCors, {
+    cors: allowOrgins
+  })
 
-  app.use(xssFilter())
-  app.use(frameguard({
-    action: 'deny',
-  }))
-  app.use(hsts({
-    "maxAge": 0,
-    "includeSubDomains": true
-  }))
-  app.use(hidePoweredBy())
-  app.use(ieNoOpen())
-  app.use(noSniff())
+  await fastify.register(fastifyQs)
 
-  app.use(cors({
-    origin: allowOrgins,
-  }))
+  await fastify.register(fastifyHelmet, { global: true })
+
+  await fastify.register(fastifyMultipart, {
+    attachFieldsToBody: true,
+  });
+
+  fastify.setErrorHandler(errorHandler)
+  fastify.setNotFoundHandler(notFoundHandler)
 }

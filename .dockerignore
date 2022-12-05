@@ -2,3 +2,12 @@ node_modules
 
 .vscode
 .git
+
+# Project path
+.cache
+.media
+.todo
+.swarmpit
+.docker
+*.http
+*.env

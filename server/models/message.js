@@ -1,29 +1,25 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import {sequelize} from '#connector/db.js'
 
-const { sequelize } = require("@connector/db");
-
-module.exports = sequelize.define(
+export default sequelize.define(
   'message', {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
+      allowNull: false,
     },
     timestamp: {
       primaryKey: true,
       type: Sequelize.DATE,
+      allowNull: false,
     },
     content: {
       type: Sequelize.STRING,
     },
-    attachment_type: {
-      type: Sequelize.INTEGER,
-    },
-    attachment: {
-      type: Sequelize.STRING,
-    },
     sender_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
+      allowNull: false,
       // references: {
       //   key: 'id',
       //   model: 'user',
@@ -45,4 +41,4 @@ module.exports = sequelize.define(
     tableName: 'message',
     timestamps: false,
   },
-)
+);

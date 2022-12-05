@@ -5,9 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch current",
-      "program": "${file}",
+      "name": "Launch via NPM",
       "request": "launch",
+      "runtimeArgs": [
+        "run",
+        "migrate",
+        "development"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "runtimeExecutable": "npm",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -23,6 +29,16 @@
       ],
       "envFile": "${workspaceFolder}/.env",
       "program": "${workspaceFolder}/server/index.js"
+    },
+    {
+      "name": "Launch current",
+      "program": "${file}",
+      "request": "launch",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "type": "node"
     }
   ]
 }

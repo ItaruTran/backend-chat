@@ -1,0 +1,40 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "options": {
+    "env": {
+      "NODE_ENV": "development",
+      "POSTGRES_SERVER": "127.0.0.1",
+      "POSTGRES_DB": "chatdb",
+      "POSTGRES_PASSWORD": "",
+      "POSTGRES_USER": "app-user",
+    }
+  },
+  "tasks": [
+    {
+      "label": "run worker",
+      "type": "shell",
+      "command": "node ./server/run-worker.js",
+      "problemMatcher": []
+    },
+    {
+      "label": "migrate",
+      "type": "shell",
+      "command": "npx sequelize-cli db:migrate --env development",
+      "problemMatcher": []
+    },
+    {
+      "label": "Undoing Migrations",
+      "type": "shell",
+      "command": "npx sequelize-cli db:migrate:undo --env development",
+      "problemMatcher": []
+    },
+    {
+      "label": "make migration",
+      "type": "shell",
+      "command": "sequelize-mig migration:make -n auto-migrations",
+      "problemMatcher": []
+    }
+  ]
+}

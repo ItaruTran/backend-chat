@@ -1,32 +1,19 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import { sequelize } from '#connector/db.js'
 
-const { sequelize } = require("@connector/db");
-
-const { hashPassword } = require('@lib/hash');
-
-const User = sequelize.define(
-  'user', {
+export default sequelize.define(
+  'user',
+  {
     id: {
-      type: Sequelize.INTEGER,
-      autoIncrement: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
+      allowNull: false,
     },
-    username: {
-      type: Sequelize.STRING,
-      unique: true,
-    },
-    password: {
-      type: Sequelize.STRING,
-    },
-  }, {
-    timestamps: false,
+    name: Sequelize.STRING,
+  },
+  {
+    createdAt: 'created',
+    updatedAt: 'modified',
   }
-)
-
-function passwordHook(user, options) {
-  user.password = hashPassword(user.password)
-}
-User.beforeCreate(passwordHook)
-User.beforeUpdate(passwordHook)
-
-module.exports = User
+);

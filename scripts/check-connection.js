@@ -1,9 +1,8 @@
-require('module-alias/register')
-const redis = require("redis");
+import Redis from 'ioredis';
 
-const { sequelize } = require("@connector/db");
-const { sleep } = require("@utils/promise-wraper");
-const { redisSettings } = require('@sv/env');
+import { sequelize } from '#connector/db.js';
+import { sleep } from '#utils/promise-wraper.js';
+import { redisSettings } from '#sv/env.js';
 
 async function checkDB() {
   try {
@@ -19,8 +18,11 @@ async function checkDB() {
 }
 
 async function checkRedis() {
-  return new Promise((res, rej) => {
-    const client = redis.createClient({ host: redisSettings.host, port: redisSettings.port });
+  return new Promise((res, _) => {
+    const client = new Redis({
+      host: redisSettings.host,
+      port: redisSettings.port,
+    })
 
     client.on('ready', () => {
       console.log('Connection to redis has been established successfully.');

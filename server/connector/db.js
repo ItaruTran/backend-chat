@@ -1,8 +1,11 @@
-const { Sequelize } = require('sequelize');
+import {Sequelize} from 'sequelize';
+import {postgresql, stage} from '#sv/env.js'
 
-const { postgresql, stage } = require('@sv/env');
+let logging = console.log
+if (stage !== 'production' && stage !== 'staging')
+  logging = null
 
-exports.sequelize = new Sequelize(
+export const sequelize = new Sequelize(
   postgresql.database,
   postgresql.user,
   postgresql.password, {
@@ -14,5 +17,5 @@ exports.sequelize = new Sequelize(
       acquire: 30000,
       idle: 10000
     },
-    logging: stage !== 'production'
+    logging
 });

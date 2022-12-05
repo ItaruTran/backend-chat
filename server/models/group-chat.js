@@ -1,8 +1,8 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import {sequelize} from '#connector/db.js'
+import {mediaUrl} from '#sv/env.js'
 
-const { sequelize } = require("@connector/db");
-
-module.exports = sequelize.define(
+export default sequelize.define(
   'group_chat',
   {
     id: {
@@ -12,12 +12,28 @@ module.exports = sequelize.define(
     },
     name: Sequelize.STRING,
     owner_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       // references: {
       //   key: 'id',
       //   model: 'users',
       //   deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
       // },
+    },
+    friend_id: {
+      type: Sequelize.UUID,
+    },
+    group_avatar: {
+      type: Sequelize.STRING,
+      get() {
+        const url = this.getDataValue('group_avatar');
+        if (url)
+          return mediaUrl + url;
+        else
+          return null
+      },
+    },
+    last_message_time: {
+      type: Sequelize.DATE,
     },
   },
   {

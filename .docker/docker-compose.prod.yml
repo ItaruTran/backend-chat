@@ -1,0 +1,166 @@
+version: "3.5"
+
+networks:
+  public:
+    external: true
+    name: traefik_public
+
+volumes:
+  media-gfs:
+    driver: glusterfs
+  postgres-backup:
+    driver: glusterfs
+  redis-backup:
+    driver: glusterfs
+
+services:
+  postgres-backup:
+    image: postgres:13.2
+    volumes:
+      - app-db-data:/var/lib/postgresql/data
+      - postgres-backup:/backup
+    networks:
+      - db-net
+    logging:
+      driver: loki
+      options:
+        loki-url: http://localhost:3100/loki/api/v1/push
+        keep-file: 'true'
+        max-size: 20m
+        max-file: '15'
+    command:
+      - bash
+      - -c
+      - |
+          set -eo pipefail
+          echo "postgres:5432:$POSTGRES_DB:$POSTGRES_USER:$POSTGRES_PASSWORD" > ~/.pgpass
+          chmod 0600 ~/.pgpass
+          pg_dump -v -U $POSTGRES_USER -h postgres $POSTGRES_DB | gzip -9 > /backup/backup-$$(date +%Y%m%d-%H%M%S).sql.gz
+          ls -lh /backup/
+
+          if (( $$(ls -1 /backup/ | wc -l) > 7 )); then
+            echo 'Delete old file'
+            find /backup/ -type f -mtime +7 -name '*.sql.gz' -print -delete
+          fi
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: none
+      placement:
+        constraints:
+          - node.labels.name==db
+          - node.labels.cluster-name==prod
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=@daily"
+        - "swarm.cronjob.skip-running=true"
+
+  postgres:
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4gb
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      placement:
+        constraints:
+          - node.labels.name==db
+          - node.labels.cluster-name==prod
+
+  redis-backup:
+    image: redis:6.2
+    networks:
+      - redis-net
+    volumes:
+      - redisdb:/data
+      - redis-backup:/backup
+    logging:
+      driver: loki
+      options:
+        loki-url: http://localhost:3100/loki/api/v1/push
+        keep-file: 'true'
+        max-size: 20m
+        max-file: '15'
+    command:
+      - bash
+      - -c
+      - |
+          set -eo pipefail
+          cd /data
+          tar cvf /backup/backup-$$(date +%Y%m%d-%H%M%S).tar .
+          ls -lh /backup/
+
+          if (( $$(ls -1 /backup/ | wc -l) > 7 )); then
+            echo 'Delete old file'
+            find /backup/ -type f -mtime +7 -name '*.tar' -print -delete
+          fi
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: none
+      placement:
+        constraints:
+          - node.labels.name==db
+          - node.labels.cluster-name==prod
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=@daily"
+        - "swarm.cronjob.skip-running=true"
+
+  redis:
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+      placement:
+        constraints:
+          - node.labels.name==db
+          - node.labels.cluster-name==prod
+
+  backend-chat:
+    logging:
+      driver: loki
+      options:
+        loki-url: http://localhost:3100/loki/api/v1/push
+        keep-file: 'true'
+        max-size: 20m
+        max-file: '15'
+    networks:
+      - public
+    deploy:
+      resources:
+        limits:
+          cpus: '1.4'
+          memory: 2gb
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      placement:
+        constraints:
+          - node.labels.cluster-name==prod
+
+  worker:
+    logging:
+      driver: loki
+      options:
+        loki-url: http://localhost:3100/loki/api/v1/push
+        keep-file: 'true'
+        max-size: 20m
+        max-file: '15'
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1gb
+        reservations:
+          cpus: '0.05'
+          memory: 256M
+      placement:
+        constraints:
+          - node.labels.cluster-name==prod

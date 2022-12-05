@@ -1,4 +1,4 @@
-exports.HTTPError = class HTTPError extends Error {
+export class HTTPError extends Error {
   /**
    * @param {number} [code]
    * @param {string} [message]
@@ -19,7 +19,7 @@ exports.HTTPError = class HTTPError extends Error {
   }
 }
 
-exports.ForbiddenError = class ForbiddenError extends this.HTTPError {
+export class ForbiddenError extends HTTPError {
   /**
    * @param {string} [message]
    * @param {any} [data]
@@ -29,12 +29,32 @@ exports.ForbiddenError = class ForbiddenError extends this.HTTPError {
   }
 }
 
-exports.ValidationError = class ValidationError extends this.HTTPError {
+export class ValidationError extends HTTPError {
   /**
  * @param {string} [message]
  * @param {any} [data]
  */
   constructor(message, data) {
     super(422, message || 'Validation error', data)
+  }
+}
+
+export class UnauthorizedError extends HTTPError {
+  /**
+   * @param {string} [message]
+   * @param {any} [data]
+   */
+  constructor(message, data) {
+    super(401, message || 'Unauthorized', data)
+  }
+}
+
+export class NotFoundError extends HTTPError {
+  /**
+   * @param {string} [message]
+   * @param {any} [data]
+   */
+  constructor(message, data) {
+    super(404, message || 'NotFoundError', data)
   }
 }

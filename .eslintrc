@@ -1,7 +1,12 @@
 {
+  "extends": "eslint:recommended",
+  "env": {
+    "es6": true,
+    "node": true
+  },
   "parserOptions": {
-    "ecmaVersion": 9,
-    "sourceType": "script"
+    "ecmaVersion": 11,
+    "sourceType": "module"
   },
   "rules": {
     "camelcase": "off",
@@ -11,6 +16,6 @@
     "comma-dangle": "off",
     "space-before-function-paren": "off",
     "quotes": "off",
-    "one-var": "off"
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
   }
 }

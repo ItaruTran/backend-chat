@@ -1,0 +1,106 @@
+version: "3.5"
+
+services:
+  postgres:
+    image: postgres:13.2
+    user: postgres
+    volumes:
+      - app-db-data:/var/lib/postgresql/data
+    # env_file:
+    #   - ${ENV_FILE?Missing env file config}
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB?Missing POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD?Missing POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER?Missing POSTGRES_USER}
+    networks:
+      - db-net
+    restart: on-failure:5
+    command:
+      # DB Version: 13
+      # OS Type: linux
+      # DB Type: dw
+      # Total Memory (RAM): 4 GB
+      # CPUs num: 2
+      # Connections num: 120
+      # Data Storage: ssd
+      # Tools: https://pgtune.leopard.in.ua/#/
+      - postgres
+      - -c
+      - config_file=/var/lib/postgresql/data/postgresql.conf
+      - -c
+      - max_connections=120
+      - -c
+      - shared_buffers=1GB
+      - -c
+      - effective_cache_size=3GB
+      - -c
+      - maintenance_work_mem=512MB
+      - -c
+      - checkpoint_completion_target=0.9
+      - -c
+      - wal_buffers=16MB
+      - -c
+      - default_statistics_target=500
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - effective_io_concurrency=200
+      - -c
+      - min_wal_size=4GB
+      - -c
+      - max_wal_size=16GB
+      - -c
+      - max_worker_processes=2
+      - -c
+      - max_parallel_workers_per_gather=1
+      - -c
+      - max_parallel_workers=2
+      - -c
+      - max_parallel_maintenance_workers=1
+      # Custom config
+      - -c
+      - synchronous_commit=on
+      - -c
+      - work_mem=128MB
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+        max_attempts: 5
+        window: 120s
+      labels:
+        server.type: db
+        service.stage: ${STAGE?Missing service stage}
+
+  redis:
+    image: redis:6.2
+    user: redis
+    volumes:
+      - redisdb:/data
+    networks:
+      - redis-net
+    # env_file:
+    #   - ${ENV_FILE?Missing env file config}
+    # healthcheck:
+    #   test: ["CMD", "redis-cli", "ping"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
+    restart: on-failure:5
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 1s
+        max_attempts: 5
+        window: 120s
+      labels:
+        server.type: redis
+        service.stage: ${STAGE?Missing service stage}
+
+volumes:
+  app-db-data:
+  redisdb:
+
+networks:
+  redis-net:
+  db-net:

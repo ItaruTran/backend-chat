@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "outDir": "./built",
+    "target": "es2019",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "paths": {
+      "#connector/*": ["server/connector/*"],
+      "#t/*": [
+        "server/typings/*"
+      ],
+      "#utils/*": [
+        "utils/*"
+      ],
+      "#models": [
+        "server/models"
+      ],
+      "#lib/*": [
+        "server/lib/*"
+      ],
+      "#sv/*": [
+        "server/*"
+      ],
+      "#helpers/*": ["server/helpers/*"],
+      "#api/*": [
+        "server/api/*"
+      ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "./built/**/*"
+  ],
+  "include": [
+    "**/*.cjs",
+    "**/*.js",
+    "**/*.json"
+  ]
+}

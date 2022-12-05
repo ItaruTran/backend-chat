@@ -1,8 +1,8 @@
 import * as Sequelize from 'sequelize';
 
 interface FriendShipInput {
-  user1_id: number
-  user2_id: number
+  user1_id: string
+  user2_id: string
 }
 
 interface FriendShip extends FriendShipInput {
@@ -11,8 +11,8 @@ interface FriendShip extends FriendShipInput {
 
 declare class FriendShipM extends Sequelize.Model<FriendShip, FriendShipInput> implements FriendShip {
   id: number
-  user1_id: number
-  user2_id: number
+  user1_id: string
+  user2_id: string
 }
 
 export = FriendShipM

@@ -1,0 +1,104 @@
+version: "3.5"
+
+services:
+  backend-chat:
+    image: ${TAG_NAME?Missing tag}/server:${STAGE?Missing service stage}
+    build:
+      context: ../
+      dockerfile: .docker/Dockerfile
+    user: appuser
+    networks:
+      - redis-net
+      - db-net
+    volumes:
+      - media-gfs:/storage
+    env_file:
+      - ${ENV_FILE?Missing env file config}
+    restart: on-failure:5
+    healthcheck:
+      test: ['CMD', 'scripts/wait-for-it.sh', '127.0.0.1:3000', '-t', '1' ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      mode: replicated
+      replicas: ${API_REPLICAS?Missing replica number for api}
+      # rollback_config:
+      #   parallelism: 1
+      #   delay: 0s
+      #   order: stop-first
+      #   failure_action: pause
+      #   monitor: 5s
+      update_config:
+        parallelism: 1
+        delay: 2s
+        order: start-first
+        failure_action: rollback
+        monitor: 5s
+      restart_policy:
+        condition: on-failure
+        delay: 2s
+        max_attempts: 2
+        window: 120s
+      labels:
+        - server.type=api
+        - service.stage=${STAGE?Missing service stage}
+        # Enable Traefik for this service, to make it available in the public network
+        - traefik.enable=true
+        # Use the traefik-public network (declared below)
+        - traefik.docker.network=traefik_public
+        # Use the custom label "traefik.constraint-label=traefik-public"
+        # This public Traefik will only use services with this label
+        # That way you can add other internal Traefik instances per stack if needed
+        - traefik.constraint-label=traefik-public
+        # traefik-http set up only to use the middleware to redirect to https
+        # Uses the environment variable DOMAIN
+        - traefik.http.routers.${name}-http.rule=Host(`${HOST_NAME?Missing host name}`)
+        - traefik.http.routers.${name}-http.entrypoints=web
+        - traefik.http.routers.${name}-http.middlewares=https-redirect
+        # traefik-https the actual router using HTTPS
+        # Uses the environment variable DOMAIN
+        - traefik.http.routers.${name}-https.rule=Host(`${HOST_NAME?Missing host name}`)
+        - traefik.http.routers.${name}-https.entrypoints=websecure
+        - traefik.http.routers.${name}-https.tls=true
+        # Define the port inside of the Docker service to use
+        - traefik.http.services.${name}.loadbalancer.server.port=3000
+
+  worker:
+    image: ${TAG_NAME?Missing tag}/server:${STAGE?Missing service stage}
+    user: appuser
+    command: node server/run-worker.js
+    env_file:
+      - ${ENV_FILE?Missing env file config}
+    networks:
+      - redis-net
+      - db-net
+    volumes:
+      - media-gfs:/storage
+    restart: on-failure:5
+    deploy:
+      mode: replicated
+      replicas: ${WORKER_REPLICAS?Missing replica number for api}
+      # rollback_config:
+      #   parallelism: 1
+      #   delay: 0s
+      #   order: stop-first
+      #   failure_action: pause
+      #   monitor: 5s
+      update_config:
+        parallelism: 1
+        delay: 2s
+        # order: stop-first
+        failure_action: rollback
+        monitor: 5s
+      restart_policy:
+        condition: on-failure
+        delay: 2s
+        max_attempts: 5
+        window: 120s
+      labels:
+        server.type: worker
+        service.stage: ${STAGE?Missing service stage}
+
+volumes:
+  media-gfs:

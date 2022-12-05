@@ -9,19 +9,25 @@ import {
 
 import Member from "./member";
 
-interface GroupChatInput {
+export interface GroupChatInput {
   name: string
-  owner_id: number
+  owner_id: string
+  friend_id: string
+  group_avatar?: string
+  last_message_time?: Date
 }
 
 interface GroupChat extends GroupChatInput {
   id: number
 }
 
-declare class GroupChatM extends Model<GroupChat, GroupChatInput> implements GroupChat {
+class GroupChatM extends Model<GroupChat, GroupChatInput> implements GroupChat {
   id: number
   name: string
-  owner_id: number
+  owner_id: string
+  friend_id: string
+  group_avatar?: string
+  last_message_time?: Date
 
   public getMembers: HasManyGetAssociationsMixin<Member>;
   public addMember: HasManyAddAssociationMixin<Member, number>;
@@ -30,4 +36,4 @@ declare class GroupChatM extends Model<GroupChat, GroupChatInput> implements Gro
   public createMember: HasManyCreateAssociationMixin<Member>;
 }
 
-export = GroupChatM
+export default GroupChatM

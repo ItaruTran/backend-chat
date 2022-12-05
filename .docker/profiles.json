@@ -1,0 +1,57 @@
+{
+  "_settings": {
+    "env_keys": [
+      "POSTGRES_DB",
+      "POSTGRES_PASSWORD",
+      "POSTGRES_USER"
+    ]
+  },
+  "local": {
+    "name": "backend-chat",
+    "context": "default",
+
+    "STAGE": "development",
+    "TAG_NAME": "ghcr.io/itarutran/backend-chat",
+    "HOST_NAME": "",
+    "ENV_FILE": "../.docker.env",
+
+    "API_REPLICAS": "1",
+    "WORKER_REPLICAS": "0"
+  },
+  "development": {
+    "name": "backend-chat",
+    "context": "chat-dev",
+
+    "STAGE": "development",
+    "TAG_NAME": "ghcr.io/itarutran/backend-chat",
+    "HOST_NAME": "chat-api.dev.test.com",
+    "ENV_FILE": "../.docker.env",
+
+    "API_REPLICAS": "1",
+    "WORKER_REPLICAS": "1"
+  },
+  "staging": {
+    "name": "staging-chat",
+    "context": "chat-dev",
+
+    "STAGE": "staging",
+    "TAG_NAME": "ghcr.io/itarutran/backend-chat",
+    "HOST_NAME": "chat-api-staging.test.com",
+    "ENV_FILE": "../staging.chat.env",
+
+    "API_REPLICAS": "1",
+    "WORKER_REPLICAS": "1"
+  },
+  "production": {
+    "name": "production-chat",
+    "context": "prod",
+
+    "STAGE": "production",
+    "TAG_NAME": "ghcr.io/itarutran/backend-chat",
+    "HOST_NAME": "chat-api.test.com",
+    "ENV_FILE": "../production.chat.env",
+
+    "API_REPLICAS": "2",
+    "WORKER_REPLICAS": "2"
+  }
+}

@@ -1,0 +1,12 @@
+version: "3.5"
+
+services:
+  postgres:
+    ports:
+      - 5432:5432
+  redis:
+    ports:
+      - 6378:6379
+  backend-chat:
+    ports:
+      - 3000:3000

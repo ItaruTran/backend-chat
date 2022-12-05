@@ -1,14 +1,35 @@
-const { includeUser } = require("@sv/env");
+import Message from "./message.js"
+import GroupChat from './group-chat.js'
+import Member from './member.js'
+import Attachment from './attachment.js';
+import User from './user.js';
 
-exports.FriendShip = require("./friendship");
-exports.Message = require("./message");
-exports.GroupChat = require('./group-chat')
-exports.Member = require('./member')
-
-this.GroupChat.hasMany(
-  this.Member,
+GroupChat.hasMany(
+  Member,
+  { foreignKey: 'group_id' }
+)
+GroupChat.hasMany(
+  Attachment,
   { foreignKey: 'group_id' }
 )
 
-if (includeUser)
-  exports.User = require("./user");
+Message.hasMany(
+  Attachment,
+  { as: 'attachments' }
+)
+
+export default {
+  Message,
+  GroupChat,
+  Member,
+  Attachment,
+  User,
+}
+
+export {
+  Message,
+  GroupChat,
+  Member,
+  Attachment,
+  User,
+}

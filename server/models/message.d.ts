@@ -1,28 +1,41 @@
-import * as Sequelize from 'sequelize';
+import {
+  Model,
+  HasManyAddAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+  HasManyAddAssociationsMixin,
+} from 'sequelize';
+
+import Attachment from './attachment'
 
 interface MessageInput {
   content: string
-  attachment_type?: number
-  attachment?: string
-  sender_id: number
+  sender_id: string
   friendship_id?: number
   group_id?: number
 }
 
 interface Message extends MessageInput {
-  id: number
+  id: string
   timestamp: Date
 }
 
-declare class MessageM extends Sequelize.Model<Message, MessageInput> implements Message {
-  id: number
+declare class MessageM extends Model<Message, MessageInput> implements Message {
+  id: string
   timestamp: Date
   content: string
-  attachment_type?: number
-  attachment?: string
-  sender_id: number
+  sender_id: string
   friendship_id?: number
   group_id?: number
+
+  public getAttachments: HasManyGetAssociationsMixin<Attachment>;
+  public addAttachment: HasManyAddAssociationMixin<Attachment, string>;
+  public addAttachments: HasManyAddAssociationsMixin<Attachment, string>
+  public hasAttachment: HasManyHasAssociationMixin<Attachment, string>;
+  public countAttachments: HasManyCountAssociationsMixin;
+  public createAttachment: HasManyCreateAssociationMixin<Attachment>;
 }
 
 export = MessageM

@@ -1,8 +1,7 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import {sequelize} from '#connector/db.js'
 
-const { sequelize } = require("@connector/db");
-
-module.exports = sequelize.define(
+export default sequelize.define(
   'friendship', {
     id: {
       type: Sequelize.INTEGER,
@@ -10,7 +9,7 @@ module.exports = sequelize.define(
       primaryKey: true,
     },
     user1_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       // references: {
       //   key: 'id',
       //   model: 'users',
@@ -18,7 +17,7 @@ module.exports = sequelize.define(
       // },
     },
     user2_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       // references: {
       //   key: 'id',
       //   model: 'users',
@@ -40,4 +39,4 @@ module.exports = sequelize.define(
     createdAt: 'created',
     updatedAt: 'modified',
   },
-)
+);

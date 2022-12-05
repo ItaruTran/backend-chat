@@ -20,3 +20,9 @@ npm-debug.log
 
 *.env
 .vscode/settings.json
+
+# Project path
+.cache
+.media
+.todo
+.swarmpit

@@ -1,12 +1,11 @@
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import {sequelize} from '#connector/db.js'
 
-const { sequelize } = require("@connector/db");
-
-module.exports = sequelize.define(
+export default sequelize.define(
   'member',
   {
     member_id: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.UUID,
       primaryKey: true,
       // references: {
       //   key: 'id',
@@ -23,14 +22,20 @@ module.exports = sequelize.define(
         deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE,
       },
     },
+    viewed_message_time: {
+      type: Sequelize.DATE,
+    },
+    viewed_message_id: {
+      type: Sequelize.UUID,
+    },
+    view_message_from: {
+      type: Sequelize.DATE,
+    },
   },
   {
     indexes: [
       {
-        fields: ['member_id'],
-      },
-      {
-        fields: ['group_id'],
+        fields: ['member_id', 'group_id'],
       },
     ],
     createdAt: 'created',

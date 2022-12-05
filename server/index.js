@@ -1,49 +1,75 @@
-'use strict';
-const { createServer } = require("http");
-const { readdirSync } = require('fs')
-
-require('module-alias/register.js')
-const express = require("express");
-
-// routes
-const apiRouter = require("@api/index");
-
-// // middlewares
-const commonMid = require('./middlewares/common.js')
-const notFound = require('./middlewares/not-found')
-const { socketManager } = require("./ws");
-const { serverPort } = require("./env");
+import { readdirSync } from 'fs';
+import fastifyStatic from "@fastify/static";
+import commonMid from './middlewares/common.js';
+import { socketManager } from '#connector/ws.js';
+import { serverPort, mediaPath } from "./env.js";
+import { backgroundJobs } from '#connector/queue-job.js';
+import { sequelize } from '#connector/db.js';
+import { redisClient } from '#connector/redis.js';
+import fastify, { loadApi } from "#lib/fastify.js";
+// import { BullMonitorFastify } from '@bull-monitor/fastify';
+import { securityHandler } from './middlewares/auth.js';
+import { openApiDocs } from './openapi.js';
 
 main()
 
 async function main() {
-  const app = express();
-
-  app.set("port", serverPort);
-
   // setup common middlewares
-  commonMid(app)
+  await commonMid(fastify)
 
-  app.use("/api", apiRouter);
+  // const monitor = new BullMonitorFastify({
+  //   queues: backgroundJobs,
+  //   baseUrl: '/job-monitor',
+  //   metrics: {
+  //     // collect metrics every X
+  //     // where X is any value supported by https://github.com/kibertoad/toad-scheduler
+  //     collectInterval: { seconds: 5 },
+  //     maxMetrics: 360,
+  //   },
+  // });
+  // await monitor.init({
+  //   app: fastify
+  // });
+  // await fastify.register(monitor.plugin);
 
-  notFound(app)
+  await fastify.register(fastifyStatic, {
+    root: mediaPath,
+    prefix: '/media/',
+  })
+
+  await loadApi({
+    app: fastify,
+    folder: 'server/api',
+    prefix: '/api',
+    openapi: openApiDocs,
+    defaultSecurities: {
+      jwt: securityHandler
+    },
+    defaultRespones: {
+      401: {
+        title: 'Error',
+        type: 'object',
+        required: ['success', 'type'],
+        properties: {
+          success: { type: 'boolean', default: false, },
+          message: { type: 'string', nullable: true, },
+          type: { type: 'string' },
+          data: { type: 'object', nullable: true, },
+          stack: { type: 'string', nullable: true, },
+        },
+      },
+    },
+  })
 
   for (const file of readdirSync('./server/boot')) {
     if (file.endsWith('.js')) {
-      const func = require(`@sv/boot/${file}`)
-      await func(app)
+      const func = (await import(`#sv/boot/${file}`)).default
+      await func(fastify)
     }
   }
 
-  /** Create HTTP server. */
-  const server = createServer(app);
   /** Create socket connection */
-  socketManager.init(server);
+  socketManager.init(fastify.server);
 
-  /** Listen on provided port, on all network interfaces. */
-  server.listen(serverPort);
-  /** Event listener for HTTP server "listening" event. */
-  server.on("listening", () => {
-    console.log(`Listening on: http://localhost:${serverPort}/`)
-  });
+  await fastify.listen({ port: serverPort })
 }

@@ -1,18 +1,23 @@
-import * as Sequelize from 'sequelize';
+import {
+  Model,
+  HasManyAddAssociationMixin,
+  HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
+  HasManyCountAssociationsMixin,
+  HasManyCreateAssociationMixin,
+} from 'sequelize';
 
 interface UserInput {
-  username: string
-  password: string
+  name: string
 }
 
 interface User extends UserInput {
-  id: number
+  id: string
 }
 
-declare class UserM extends Sequelize.Model<User, UserInput> implements User {
-  id: number
-  username: string
-  password: string
+declare class UserM extends Model<User, UserInput> implements User {
+  id: string
+  name: string
 }
 
 export = UserM

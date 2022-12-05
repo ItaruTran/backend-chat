@@ -1,84 +1,96 @@
 @host=http://127.0.0.1:3000
-@token=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzIiwiaWF0IjoxNjE2OTAyNDY5fQ._mrZ4H1Rzp_5lyA1QsIKAXOw6C0bwD6XGrm98FRedCs
+@token=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwidXNlcl9pZCI6IjljMGQ5NDY4LWMyYWEtNGJmYS1hMzE3LWM3ZWM3MWEzM2E2ZSIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.rdbfarA0NwxNilb-Hf9LyfWnhOwbDWPA8_5XKDRQ6dU
 @token2=Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNjE2OTAyNTYxfQ.IgRQHdos9ry8FvXfHjI_k5fRXFLvkyDKeP5-ACLhZLc
+@token3=Token 123456789
 
-POST {{host}}/api/users/login HTTP/1.1
+POST {{host}}/api/users HTTP/1.1
 Content-Type: application/json
-
-{
-  "username": "Remy Sharp",
-  "password": "123456"
-}
-
-###
-POST {{host}}/api/group-chat/ HTTP/1.1
-Content-Type: application/json
-Authorization: {{token}}
 
 {
   "name": "test"
 }
 
 ###
-GET {{host}}/api/group-chat/ HTTP/1.1
-Authorization: {{token}}
+GET {{host}}/api/users
+  ?ids[]=73e23a84-1d36-4cf7-9b91-ed00e959b091
+  &ids[]=0943c6e1-7c0e-4df8-a016-07680d1c7b7c
+
 
 ###
-POST {{host}}/api/group-chat/1/member/ HTTP/1.1
+POST {{host}}/api/group-chat/ HTTP/1.1
 Content-Type: application/json
-Authorization: {{token}}
+Authorization: {{token3}}
 
 {
-  "member_id": 1
+  "name": "test",
+  "members": [
+    "9c0d9468-b2aa-4bfa-a317-c7ec71a11a6e",
+    "9c0d9468-c2aa-4bfa-a317-c7ec71a33a6e"
+  ]
 }
 
-###
-GET {{host}}/api/group-chat/1/member/ HTTP/1.1
-Content-Type: application/json
-Authorization: {{token2}}
+# {
+#   "name": "test",
+#   "friend_id": "eb8eb64b-31fd-45e3-8afd-491d2af421f7"
+# }
 
 ###
-POST {{host}}/api/friendship/ HTTP/1.1
-Content-Type: application/json
-Authorization: {{token}}
-
-{
-  "user_id": 4
-}
-
-###
-GET {{host}}/api/friendship/ HTTP/1.1
-Content-Type: application/json
-Authorization: {{token}}
-
-###
-POST {{host}}/api/message/ HTTP/1.1
-Content-Type: application/json
-Authorization: {{token}}
-
-{
-  "content": "ae",
-  "friendship_id": 3
-}
-
-###
-POST {{host}}/api/message/ HTTP/1.1
-Content-Type: application/json
-Authorization: {{token2}}
-
-{
-  "content": "ae",
-  "group_id": 3
-}
-
-###
-GET {{host}}/api/message/
-  ?filter={"friendship_id": 1}
-  &limit=5
+GET {{host}}/api/group-chat/
+  ?order=last_message_time DESC
+  &limit=10
   &offset=0
-  &order=timestamp DESC
-Content-Type: application/json
 Authorization: {{token2}}
+
+###
+POST {{host}}/api/group-chat/2/member/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+  "member_id": "9c0d9468-b2aa-4bfa-a317-c7ec71a12a6e"
+}
+
+###
+GET {{host}}/api/group-chat/16/member/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token3}}
+
+###
+POST {{host}}/api/message/ HTTP/1.1
+Authorization: {{token3}}
+Content-Type: application/json
+
+{
+  "group_id": 11,
+  "content": "fawe"
+}
+
+###
+POST {{host}}/api/message/ HTTP/1.1
+Authorization: {{token}}
+Content-Type: multipart/form-data; boundary=---------------------------9051914041544843365972754266
+
+-----------------------------9051914041544843365972754266
+Content-Disposition: form-data; name="content"
+
+text default
+-----------------------------9051914041544843365972754266
+Content-Disposition: form-data; name="group_id"
+
+1
+-----------------------------9051914041544843365972754266
+Content-Disposition: form-data; name="attachment"; filename="a.txt"
+Content-Type: text/plain
+
+Content of a.txt.
+
+-----------------------------9051914041544843365972754266
+Content-Disposition: form-data; name="attachment"; filename="a.html"
+Content-Type: text/html
+
+<!DOCTYPE html><title>Content of a.html.</title>
+
+-----------------------------9051914041544843365972754266--
 
 ###
 GET {{host}}/api/message/
@@ -86,5 +98,16 @@ GET {{host}}/api/message/
   &limit=5
   &offset=0
   &order=timestamp DESC
+  &after_time=2021-05-18T01:42:37.814Z
 Content-Type: application/json
-Authorization: {{token2}}
+Authorization: {{token}}
+
+###
+POST {{host}}/api/group-chat/11/member/viewed HTTP/1.1
+Authorization: {{token3}}
+Content-Type: application/json
+
+{
+  "viewed_message_id": 1234567890123456,
+  "viewed_message_time": "2021-05-19T08:26:46.794Z"
+}

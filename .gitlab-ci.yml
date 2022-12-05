@@ -1,0 +1,55 @@
+
+# cache:
+#   paths:
+#     - ~/.cache
+
+stages:
+  - build
+
+variables:
+  CONTAINER_PLATFROMS: linux/amd64
+  BUILDX_VERSION: v0.5.1
+
+docker build:
+  image: docker:latest
+  services:
+    - name: docker:dind
+      command: ["--experimental"]
+
+  stage: build
+  only:
+    - /^release\/(.*)$/
+  # cache:
+  #   untracked: false
+  #   policy: pull-push
+  #   paths:
+  #     - build
+  script:
+  - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+
+  # - wget https://github.com/docker/buildx/releases/download/$BUILDX_VERSION/buildx-$BUILDX_VERSION.linux-amd64
+  # - mkdir -p ~/.docker/cli-plugins && mv buildx-$BUILDX_VERSION.linux-amd64 ~/.docker/cli-plugins/docker-buildx && chmod a+x ~/.docker/cli-plugins/docker-buildx
+
+  # - docker buildx create --platform $CONTAINER_PLATFROMS --use
+  # - docker buildx ls
+
+  - STAGE="${CI_COMMIT_REF_NAME/release\//}"
+
+  # - >
+  #    docker buildx build
+  #    --pull
+  #    --push
+  #    --platform $CONTAINER_PLATFROMS
+  #    --cache-from type=local,src=build
+  #    --cache-to type=local,dest=build,mode=max
+  #    --tag $CI_REGISTRY_IMAGE/server:$STAGE
+  #    .
+
+  - >
+     docker build
+     --file Dockerfile
+     --cache-from $CI_REGISTRY_IMAGE/server:$STAGE
+     --tag $CI_REGISTRY_IMAGE/server:$STAGE
+     .
+
+  - docker push $CI_REGISTRY_IMAGE/server:$STAGE

@@ -1,0 +1,265 @@
+{
+    "tables": {
+        "message": {
+            "tableName": "message",
+            "schema": {
+                "id": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "allowNull": false,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "timestamp": {
+                    "primaryKey": true,
+                    "allowNull": false,
+                    "field": "timestamp",
+                    "seqType": "Sequelize.DATE"
+                },
+                "content": {
+                    "field": "content",
+                    "seqType": "Sequelize.STRING"
+                },
+                "sender_id": {
+                    "allowNull": false,
+                    "field": "sender_id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "friendship_id": {
+                    "field": "friendship_id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "group_id": {
+                    "field": "group_id",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "group_chats": {
+            "tableName": "group_chats",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "name": {
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "owner_id": {
+                    "field": "owner_id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "friend_id": {
+                    "field": "friend_id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "group_avatar": {
+                    "field": "group_avatar",
+                    "seqType": "Sequelize.STRING"
+                },
+                "last_message_time": {
+                    "field": "last_message_time",
+                    "seqType": "Sequelize.DATE"
+                },
+                "created": {
+                    "allowNull": false,
+                    "field": "created",
+                    "seqType": "Sequelize.DATE"
+                },
+                "modified": {
+                    "allowNull": false,
+                    "field": "modified",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "cdc50b68b19b0f0035f5548c3bd4d85910532694": {
+                    "fields": [
+                        "id"
+                    ],
+                    "name": "group_chats_id",
+                    "options": {
+                        "indexName": "group_chats_id",
+                        "name": "group_chats_id"
+                    }
+                },
+                "23db5f8623569e4deef27d10739df9ec63b8ce26": {
+                    "fields": [
+                        "owner_id"
+                    ],
+                    "name": "group_chats_owner_id",
+                    "options": {
+                        "indexName": "group_chats_owner_id",
+                        "name": "group_chats_owner_id"
+                    }
+                }
+            }
+        },
+        "members": {
+            "tableName": "members",
+            "schema": {
+                "member_id": {
+                    "primaryKey": true,
+                    "field": "member_id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "group_id": {
+                    "primaryKey": true,
+                    "references": {
+                        "key": "id",
+                        "model": "group_chats"
+                    },
+                    "field": "group_id",
+                    "allowNull": true,
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "viewed_message_time": {
+                    "field": "viewed_message_time",
+                    "seqType": "Sequelize.DATE"
+                },
+                "viewed_message_id": {
+                    "field": "viewed_message_id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "view_message_from": {
+                    "field": "view_message_from",
+                    "seqType": "Sequelize.DATE"
+                },
+                "created": {
+                    "allowNull": false,
+                    "field": "created",
+                    "seqType": "Sequelize.DATE"
+                },
+                "modified": {
+                    "allowNull": false,
+                    "field": "modified",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": {
+                "b0efd55d00592f6f187f2f0ba235f834d31990e5": {
+                    "fields": [
+                        "member_id",
+                        "group_id"
+                    ],
+                    "name": "members_member_id_group_id",
+                    "options": {
+                        "indexName": "members_member_id_group_id",
+                        "name": "members_member_id_group_id"
+                    }
+                }
+            }
+        },
+        "attachments": {
+            "tableName": "attachments",
+            "schema": {
+                "id": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "allowNull": false,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "messageId": {
+                    "allowNull": false,
+                    "field": "messageId",
+                    "seqType": "Sequelize.UUID"
+                },
+                "group_id": {
+                    "allowNull": false,
+                    "references": {
+                        "key": "id",
+                        "model": "group_chats"
+                    },
+                    "field": "group_id",
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "url": {
+                    "allowNull": false,
+                    "field": "url",
+                    "seqType": "Sequelize.STRING"
+                },
+                "created": {
+                    "allowNull": false,
+                    "field": "created",
+                    "seqType": "Sequelize.DATE"
+                },
+                "order": {
+                    "field": "order",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": {
+                "820442258a367c5c903b25c7dc39585a30818746": {
+                    "fields": [
+                        "messageId"
+                    ],
+                    "name": "attachments_message_id",
+                    "options": {
+                        "indexName": "attachments_message_id",
+                        "name": "attachments_message_id"
+                    }
+                },
+                "2697fed03d5b1561ef844672f661f8993623ce7e": {
+                    "fields": [
+                        "group_id",
+                        "created"
+                    ],
+                    "name": "attachments_group_id_created",
+                    "options": {
+                        "indexName": "attachments_group_id_created",
+                        "name": "attachments_group_id_created"
+                    }
+                }
+            }
+        },
+        "users": {
+            "tableName": "users",
+            "schema": {
+                "id": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "allowNull": false,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "name": {
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "created": {
+                    "allowNull": false,
+                    "field": "created",
+                    "seqType": "Sequelize.DATE"
+                },
+                "modified": {
+                    "allowNull": false,
+                    "field": "modified",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "path": "sequelize/migrations/_current.json",
+    "backupPath": "sequelize/migrations/_current_bak.json",
+    "exists": false,
+    "revision": 1
+}
