@@ -1,15 +1,15 @@
 import Redis from 'ioredis';
 
-import { sequelize } from '#connector/db.js';
+import prisma from '#connector/prisma.js';
 import { sleep } from '#utils/promise-wraper.js';
 import { redisSettings } from '#sv/env.js';
 
 async function checkDB() {
   try {
-    await sequelize.authenticate()
+    await prisma.$connect()
     console.log('Connection to database has been established successfully.');
 
-    await sequelize.close()
+    await prisma.$disconnect()
     return true
   } catch (error) {
     console.error('Unable to connect to the database:', error);

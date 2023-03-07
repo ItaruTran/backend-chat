@@ -1,0 +1,233 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Attachment": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "message_id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "group_chats": {
+          "$ref": "#/definitions/GroupChat"
+        }
+      }
+    },
+    "GroupChat": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "friend_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "group_avatar": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_message_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Attachment"
+          }
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Member"
+          }
+        }
+      }
+    },
+    "Member": {
+      "type": "object",
+      "properties": {
+        "member_id": {
+          "type": "string"
+        },
+        "viewed_message_time": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "viewed_message_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "view_message_from": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "group_chats": {
+          "$ref": "#/definitions/GroupChat"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "content": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "sender_id": {
+          "type": "string"
+        },
+        "group_id": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "modified": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "normal": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ],
+          "description": "[MyType]"
+        },
+        "optional": {
+          "type": [
+            "number",
+            "string",
+            "boolean",
+            "object",
+            "array",
+            "null"
+          ],
+          "description": "[MyType]"
+        },
+        "array": {
+          "type": "array",
+          "items": {
+            "type": [
+              "number",
+              "string",
+              "boolean",
+              "object",
+              "array",
+              "null"
+            ]
+          },
+          "description": "[MyType]"
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "attachment": {
+      "$ref": "#/definitions/Attachment"
+    },
+    "groupChat": {
+      "$ref": "#/definitions/GroupChat"
+    },
+    "member": {
+      "$ref": "#/definitions/Member"
+    },
+    "message": {
+      "$ref": "#/definitions/Message"
+    },
+    "user": {
+      "$ref": "#/definitions/User"
+    }
+  }
+}

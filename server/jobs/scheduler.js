@@ -1,14 +1,13 @@
 import { messagePartition } from '#sv/sql/message.js';
-import { sequelize } from '#connector/db.js';
 import { redisClient, redisRefix } from '#connector/redis.js';
-import { GroupChat } from '#models';
+import prisma from '#connector/prisma.js';
 
 /**
  * @param {import('bull').Job} job
  */
 export default async (job) => {
   if (job.name === 'autoCreatePartition') {
-    await sequelize.query(messagePartition())
+    await prisma.$executeRawUnsafe(messagePartition())
 
   } else if (job.name === 'updateMessageTime') {
     const keys = await redisClient.keys(redisRefix.latestMessage+'*')
@@ -29,10 +28,13 @@ export default async (job) => {
       const groupID = keys[index].replace(redisRefix.latestMessage, '');
       console.log(`Update group ${groupID} ${timestamps[index]}`);
 
-      await GroupChat.update({
-        last_message_time: timestamps[index],
-      }, {
-        where: { id: groupID }
+      await prisma.groupChat.update({
+        where: {
+          id: groupID
+        },
+        data: {
+          last_message_time: timestamps[index],
+        }
       })
     }
   } else {

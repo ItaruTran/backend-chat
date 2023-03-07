@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "./client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// generator json {
+//   provider = "prisma-json-types-generator"
+//   // namespace = "PrismaJson"
+//   // clientOutput = "<finds it automatically>"
+//   // (./ -> relative to schema, or an importable path to require() it)
+// }
+
+generator jsonSchema {
+  // provider = "node ./scripts/generate-schema.js"
+  provider = "prisma-json-schema-generator"
+  output = "./server/json-schema"
+  keepRelationScalarFields = "false"
+}
+
+model Attachment {
+  id          String    @id @default(uuid()) @db.Uuid
+  message_id  String    @db.Uuid
+  group_id    Int
+  url         String    @db.VarChar(255)
+  created     DateTime  @default(now()) @db.Timestamptz(6)
+  order       Int?
+  group_chats GroupChat @relation(fields: [group_id], references: [id], onDelete: Cascade)
+
+  @@index([group_id, created], map: "attachments_group_id_created")
+  @@index([message_id], map: "attachments_message_id")
+  @@map("attachments")
+}
+
+model GroupChat {
+  id                Int          @id @default(autoincrement())
+  name              String?      @db.VarChar(255)
+  owner_id          String?      @db.Uuid
+  friend_id         String?      @db.Uuid
+  group_avatar      String?      @db.VarChar(255)
+  last_message_time DateTime?    @db.Timestamptz(6)
+  created           DateTime     @default(now()) @db.Timestamptz(6)
+  modified          DateTime     @updatedAt @db.Timestamptz(6)
+  attachments       Attachment[]
+  members           Member[]
+
+  @@index([owner_id], map: "group_chats_owner_id")
+  @@map("group_chats")
+}
+
+model Member {
+  member_id           String    @db.Uuid
+  group_id            Int
+  viewed_message_time DateTime? @db.Timestamptz(6)
+  viewed_message_id   String?   @db.Uuid
+  view_message_from   DateTime? @db.Timestamptz(6)
+  created             DateTime  @default(now()) @db.Timestamptz(6)
+  modified            DateTime  @updatedAt @db.Timestamptz(6)
+  group_chats         GroupChat @relation(fields: [group_id], references: [id], onDelete: Cascade)
+
+  @@id([member_id, group_id])
+  @@map("members")
+}
+
+model Message {
+  id        String   @default(uuid()) @db.Uuid
+  timestamp DateTime @default(now()) @db.Timestamptz(6)
+  content   String?
+  sender_id String   @db.Uuid
+  group_id  Int?
+
+  @@id([id, timestamp])
+  @@index([group_id, timestamp(sort: Desc)], map: "idx_message_group_id_timestamp")
+  @@index([id], type: Hash, map: "message_id_idx")
+  @@map("message")
+}
+
+model User {
+  id       String   @id @default(uuid()) @db.Uuid
+  name     String?  @db.VarChar(255)
+  created  DateTime @default(now()) @db.Timestamptz(6)
+  modified DateTime @updatedAt @db.Timestamptz(6)
+  /// [MyType]
+  normal Json
+
+  /// [MyType]
+  optional Json?
+
+  /// [MyType]
+  array Json[]
+
+  @@map("users")
+}
