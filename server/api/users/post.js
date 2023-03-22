@@ -29,6 +29,7 @@ if (includeUser) {
     schema: {
       ...requestSchema,
       tags: ['Users'],
+      security: null,
       // consumes: ['multipart/form-data', 'application/json'],
     },
     withTransaction: true,

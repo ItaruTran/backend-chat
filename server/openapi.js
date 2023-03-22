@@ -7,9 +7,16 @@ export const openApiDocs = {
     description: await readFile('openapi-doc.md', { encoding: 'utf8' }),
     version: '1.0.0'
   },
-  servers: [{
-    url: 'http://localhost:3000/api'
-  }],
+  servers: [
+    {
+      url: '/api',
+      description: 'current server',
+    },
+    {
+      url: 'http://localhost:3000/api',
+      description: 'local server',
+    },
+],
   components: {
     securitySchemes: {
       jwt: {

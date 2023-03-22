@@ -71,5 +71,7 @@ async function main() {
   /** Create socket connection */
   socketManager.init(fastify.server);
 
-  await fastify.listen({ port: serverPort })
+  await fastify.listen({ port: serverPort, host: '0.0.0.0' })
+
+  console.log('server ok');
 }
